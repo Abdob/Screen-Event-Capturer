@@ -1,1 +1,1 @@
-docker build -t gst-screen-record -f Dockerfile .
+docker build -t gst-screen-record -f docker/Dockerfile .

@@ -1,15 +1,9 @@
-From ubuntu:20.04
+From ubuntu:16.04
 
 ENV DEBIAN_FRONTEND=nointeractive
 
-RUN apt-get update 
-
-RUN apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev
-
-RUN apt-get install -y gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
-
-RUN apt-get install -y gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools
-	#gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl \
-	#gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
-
 WORKDIR /home
+
+COPY install_gstreamer.sh install_gstreamer.sh
+
+RUN ./install_gstreamer.sh
