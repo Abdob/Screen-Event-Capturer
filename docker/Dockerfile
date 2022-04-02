@@ -7,3 +7,5 @@ WORKDIR /home
 COPY install_gstreamer.sh install_gstreamer.sh
 
 RUN ./install_gstreamer.sh
+
+COPY run-screen-record.sh run-screen-record.sh
