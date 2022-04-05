@@ -2,10 +2,11 @@ From ubuntu:16.04
 
 ENV DEBIAN_FRONTEND=nointeractive
 
-WORKDIR /home
+WORKDIR /home/
 
 COPY install_gstreamer.sh install_gstreamer.sh
 
 RUN ./install_gstreamer.sh
 
-COPY run-screen-record.sh run-screen-record.sh
+WORKDIR /home/gstreamer_screen_record
+
