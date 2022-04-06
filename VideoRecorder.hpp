@@ -1,16 +1,21 @@
 #include <iostream>
 #include <gst/gst.h>
 #include <unistd.h>
+#include <string>
+#include <iomanip>
+#include <sstream>
 
 class VideoRecorder{
 
 public:
-    VideoRecorder();
+    VideoRecorder(unsigned short identifier);
     ~VideoRecorder();
     void startRecording();
     void stopRecording();
 
 public:
+    const unsigned short id;
+    std::string strId;
     GstElement *pipeline;
     GstElement *source;
     GstElement *scale;
