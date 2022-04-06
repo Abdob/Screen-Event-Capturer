@@ -31,7 +31,7 @@ VideoRecorder::VideoRecorder(unsigned short identifier) : id(identifier) {
     }
 
     // Set the location to save video file
-    std::string filename = "video" + strId + ".mp4";
+    filename = "video" + strId + ".mp4";
     g_object_set(sink, "location", filename.c_str(), NULL);
 };
 
@@ -39,6 +39,10 @@ VideoRecorder::~VideoRecorder(){
     std::cout << "VideoRecorder" << strId << ": destructor called." << std::endl;
     gst_element_set_state (pipeline, GST_STATE_NULL);
     gst_object_unref (pipeline);
+    if(saveFile)
+        std::cout << "VideoRecorder" << strId << ": Saving file." << std::endl;
+    else
+        std::cout << "VideoRecorder" << strId << ": Deleting file." << std::endl;
 }
 
 void VideoRecorder::startRecording(){
@@ -51,6 +55,7 @@ void VideoRecorder::startRecording(){
     }
     else
         std::cout << "VideoRecorder" << strId << ": Video recording in progress." << std::endl;
+
 };
 
 void VideoRecorder::stopRecording(){
@@ -66,6 +71,9 @@ void VideoRecorder::stopRecording(){
     	std::cout << "VideoRecorder" << strId << ": Unexpected message received." << std::endl;
 };
 
+void VideoRecorder::setSaveFile(){
+    saveFile = true;
+}
 
 
 

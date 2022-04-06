@@ -20,10 +20,22 @@ int main(int arg, char *argv[]) {
     // Initialize GStreamer
     gst_init(&arg, &argv);
 
-    std::unique_ptr<VideoRecorder> session(new VideoRecorder(1));
-    session->startRecording();
-    sleep(videoDuration);
-    session->stopRecording();
-
+    unsigned short i = 1;
+    std::unique_ptr<VideoRecorder> scopedSession(new VideoRecorder(i++));
+    scopedSession->startRecording();
+    sleep(videoDuration/2);
+    while(true){
+        std::unique_ptr<VideoRecorder> session(new VideoRecorder(i++));
+        session->startRecording();
+        sleep(videoDuration/4);
+        scopedSession->stopRecording();
+	scopedSession = std::move(session); 
+        sleep(videoDuration/4);
+	if(i==6)
+	    break;  
+    }
+    sleep(videoDuration/2);
+    scopedSession->stopRecording();
+    scopedSession->setSaveFile();
     return 0;
 }
