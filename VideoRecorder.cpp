@@ -48,7 +48,7 @@ void VideoRecorder::stopRecording(){
     if(!res) 
         std::cout << "VideoRecorder: end-of-stream signal cannot be sent!" << std::endl;
     // wait one second for frame
-    sleep(1);
+    sleep(3);
     gst_element_set_state (pipeline, GST_STATE_NULL);
 };
 
