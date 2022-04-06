@@ -15,7 +15,7 @@ VideoRecorder::VideoRecorder(){
     pipeline = gst_pipeline_new("gstreamer-pipeline");
 
     if (!pipeline || !source || !scale || !convert || !encode || !parse || !mux || !sink) 
-        std::cout << "VideoRecorder: one of more elements could be created.\n" << std::endl;
+        std::cout << "VideoRecorder: one of more elements could not be created" << std::endl;
   
     // Build the pipeline.
     gst_bin_add_many(GST_BIN(pipeline), source, scale, convert, encode, parse, mux, sink, NULL);
