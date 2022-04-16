@@ -22,6 +22,9 @@ unsigned int RecordManager::getVideoDuration(){
     return duration;
 };
 
+bool RecordManager::eventOccured(){
+    return false;
+}
 
 void RecordManager::run() {
 
@@ -36,7 +39,9 @@ void RecordManager::run() {
         std::unique_ptr<VideoRecorder> session(new VideoRecorder(videoNumber++));
         session->startRecording();
         sleep(videoDuration/4);
+        // event hasn't occured stop recording before leaving scope
         scopedSession->stopRecording();
+        // transfer scope to new session
 	    scopedSession = std::move(session); 
         sleep(videoDuration/4);
     }

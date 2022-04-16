@@ -7,7 +7,6 @@ VideoRecorder::VideoRecorder(unsigned short identifier) : id(identifier) {
     ss << std::setw(5) << std::setfill('0') << id;
     strId = ss.str();
 
-    std::cout << "VideoRecorder" << strId << ": Constructor called." << std::endl;
     // Create the elements
     source = gst_element_factory_make("ximagesrc", "source");
     scale = gst_element_factory_make("videoscale", "scale");    
@@ -36,13 +35,15 @@ VideoRecorder::VideoRecorder(unsigned short identifier) : id(identifier) {
 };
 
 VideoRecorder::~VideoRecorder(){
-    std::cout << "VideoRecorder" << strId << ": destructor called." << std::endl;
     gst_element_set_state (pipeline, GST_STATE_NULL);
     gst_object_unref (pipeline);
-    if(saveFile)
-        std::cout << "VideoRecorder" << strId << ": Saving file." << std::endl;
-    else
-        std::cout << "VideoRecorder" << strId << ": Deleting file." << std::endl;
+    if(saveFile){
+        std::cout << "VideoRecorder" << strId << ": Video recording complete, saving file." << std::endl;
+    }
+    else{
+        std::cout << "VideoRecorder" << strId << ": Video recording complete, deleting file." << std::endl;
+        remove(filename.c_str());
+    }
 }
 
 void VideoRecorder::startRecording(){
@@ -65,9 +66,7 @@ void VideoRecorder::stopRecording(){
     // wait for eos signal to traverse pipeline
     GstBus *bus = gst_element_get_bus(pipeline);
     GstMessage *msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, static_cast<GstMessageType>(GST_MESSAGE_EOS | GST_MESSAGE_ERROR));
-    if( GST_MESSAGE_TYPE (msg) == GST_MESSAGE_EOS)
-	    std::cout << "VideoRecorder" << strId << ": Video recording complete." << std::endl;
-    else
+    if( GST_MESSAGE_TYPE (msg) != GST_MESSAGE_EOS)
     	std::cout << "VideoRecorder" << strId << ": Unexpected message received." << std::endl;
 };
 

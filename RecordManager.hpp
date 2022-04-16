@@ -10,6 +10,7 @@ public:
     ~RecordManager();
     void run();
     unsigned int getVideoDuration();
+    bool eventOccured();
 
 public:
     unsigned int videoDuration;
