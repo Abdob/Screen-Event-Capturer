@@ -1,4 +1,6 @@
 #include <iostream>
+#include "VideoRecorder.hpp"
+#include <memory>
 
 class RecordManager{
 
