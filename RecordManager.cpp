@@ -8,20 +8,24 @@ RecordManager::~RecordManager() {
     std::cout << "RecordManager: destructor called" << std::endl;
 };
 
-void RecordManager::run() {
-    // get duration from user
-    unsigned int videoDuration;
-    std::cout << "Welcome to the Screen Recording App" << std::endl;
-    std::cout << "Please enter a duration in seconds" << std::endl;
-    std::cin >> videoDuration;
-    
+unsigned int RecordManager::getVideoDuration(){
+    unsigned int duration;
+    std::cout << "RecordManager: Please enter a target duration in seconds" << std::endl;
+    std::cin >> duration;
     // make duration divisible by 4
-    if(videoDuration == 0)
-	    videoDuration = 4;
+    if(duration == 0)
+	    duration = 4;
     else
-	    videoDuration = (videoDuration + 3) / 4 * 4;
+	    duration = (duration + 3) / 4 * 4;
+    std::cout << "RecordManager: Video duration is set to " << duration << " seconds." << std::endl;
+    return duration;
+};
 
-    std::cout << "Screen Recording App: video duration set to " << videoDuration << " seconds." << std::endl;
+void RecordManager::run() {
+
+    std::cout << "RecordManager: Welcome to the Screen Recording App" << std::endl;
+    // get duration from user
+    videoDuration = getVideoDuration();
 
     unsigned short i = 1;
     std::unique_ptr<VideoRecorder> scopedSession(new VideoRecorder(i++));

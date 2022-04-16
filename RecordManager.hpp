@@ -8,7 +8,8 @@ public:
     RecordManager();
     ~RecordManager();
     void run();
+    unsigned int getVideoDuration();
 
 public:
-
+    unsigned int videoDuration;
 };
