@@ -45,9 +45,9 @@ void RecordManager::run() {
         session->startRecording();
         sleep(videoDuration/4);
         if(eventOccured()){
-            // event occured on old session center, stop recording new session
+            // event occured on old session's third segment, stop recording new session
             session->stopRecording();
-            // finish recording last quarter
+            // finish recording fourth segment
             sleep(videoDuration/4);
             break;
         }
@@ -59,7 +59,7 @@ void RecordManager::run() {
         }
         sleep(videoDuration/4);
         if(eventOccured()){
-            // event occured on new session center, finish recording second half
+            // event occured on new session's second segment, finish recording second half
             sleep(videoDuration/2);
             break; 
         }
