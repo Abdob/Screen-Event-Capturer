@@ -1,7 +1,8 @@
 #include "RecordManager.hpp"
 
-RecordManager::RecordManager() {
+RecordManager::RecordManager(unsigned short vn) : videoNumber(vn) {
     std::cout << "Record Manager: construtor called" << std::endl;
+    std::cout << "Record Manager: starting with video " << vn << std::endl;
 };
 
 RecordManager::~RecordManager() {
@@ -21,25 +22,23 @@ unsigned int RecordManager::getVideoDuration(){
     return duration;
 };
 
+
 void RecordManager::run() {
 
     std::cout << "RecordManager: Welcome to the Screen Recording App" << std::endl;
     // get duration from user
     videoDuration = getVideoDuration();
 
-    unsigned short i = 1;
-    std::unique_ptr<VideoRecorder> scopedSession(new VideoRecorder(i++));
+    std::unique_ptr<VideoRecorder> scopedSession(new VideoRecorder(videoNumber++));
     scopedSession->startRecording();
     sleep(videoDuration/2);
     while(true){
-        std::unique_ptr<VideoRecorder> session(new VideoRecorder(i++));
+        std::unique_ptr<VideoRecorder> session(new VideoRecorder(videoNumber++));
         session->startRecording();
         sleep(videoDuration/4);
         scopedSession->stopRecording();
-	scopedSession = std::move(session); 
+	    scopedSession = std::move(session); 
         sleep(videoDuration/4);
-	if(i==6)
-	    break;  
     }
     sleep(videoDuration/2);
     scopedSession->stopRecording();

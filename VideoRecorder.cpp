@@ -66,7 +66,7 @@ void VideoRecorder::stopRecording(){
     GstBus *bus = gst_element_get_bus(pipeline);
     GstMessage *msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, static_cast<GstMessageType>(GST_MESSAGE_EOS | GST_MESSAGE_ERROR));
     if( GST_MESSAGE_TYPE (msg) == GST_MESSAGE_EOS)
-	std::cout << "VideoRecorder" << strId << ": Video recording complete." << std::endl;
+	    std::cout << "VideoRecorder" << strId << ": Video recording complete." << std::endl;
     else
     	std::cout << "VideoRecorder" << strId << ": Unexpected message received." << std::endl;
 };

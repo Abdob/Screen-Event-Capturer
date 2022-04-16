@@ -6,7 +6,7 @@ int main(int arg, char *argv[]) {
     gst_init(&arg, &argv);
 
     // Create and run record manager
-    RecordManager recordManager;
+    RecordManager recordManager(1);
     recordManager.run();
 
     return 0;
