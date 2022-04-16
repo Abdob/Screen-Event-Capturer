@@ -1,12 +1,9 @@
 #include "RecordManager.hpp"
 
 RecordManager::RecordManager(unsigned short vn) : videoNumber(vn) {
-    std::cout << "Record Manager: construtor called" << std::endl;
-    std::cout << "Record Manager: starting with video " << vn << std::endl;
 };
 
 RecordManager::~RecordManager() {
-    std::cout << "RecordManager: destructor called" << std::endl;
 };
 
 unsigned int RecordManager::getVideoDuration(){
@@ -23,7 +20,15 @@ unsigned int RecordManager::getVideoDuration(){
 };
 
 bool RecordManager::eventOccured(){
-    return false;
+    /* try to open file to read */
+    FILE *file;
+    if (file = fopen("event", "r")) {
+        fclose(file);
+        remove("event");
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void RecordManager::run() {
@@ -39,13 +44,26 @@ void RecordManager::run() {
         std::unique_ptr<VideoRecorder> session(new VideoRecorder(videoNumber++));
         session->startRecording();
         sleep(videoDuration/4);
-        // event hasn't occured stop recording before leaving scope
-        scopedSession->stopRecording();
-        // transfer scope to new session
-	    scopedSession = std::move(session); 
+        if(eventOccured()){
+            // event occured on old session center, stop recording new session
+            session->stopRecording();
+            // finish recording last quarter
+            sleep(videoDuration/4);
+            break;
+        }
+        else{
+            // event hasn't occured, stop recording old session before leaving scope
+            scopedSession->stopRecording();
+            // transfer scope to new session
+	        scopedSession = std::move(session); 
+        }
         sleep(videoDuration/4);
+        if(eventOccured()){
+            // event occured on new session center, finish recording second half
+            sleep(videoDuration/2);
+            break; 
+        }
     }
-    sleep(videoDuration/2);
     scopedSession->stopRecording();
     scopedSession->setSaveFile();
 };
