@@ -26,8 +26,8 @@ VideoRecorder::VideoRecorder(unsigned short identifier) : id(identifier) {
     // Build the pipeline.
     gst_bin_add_many(GST_BIN(pipeline), source, scale, convert, encode, parse, mux, sink, NULL);
     if (!gst_element_link_many(source, scale, convert, encode, parse, mux, sink, NULL)) {
-	std::cout << "VideoRecorder" << strId << ": Elements could not be linked." << std::endl;
-	gst_object_unref(pipeline);
+        std::cout << "VideoRecorder" << strId << ": Elements could not be linked." << std::endl;
+        gst_object_unref(pipeline);
     }
 
     // Set the location to save video file

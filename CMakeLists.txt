@@ -21,7 +21,7 @@ link_directories(
 )
 
 #building target executable
-add_executable(${PROJECT_NAME} main.cpp VideoRecorder.cpp)
+add_executable(${PROJECT_NAME} main.cpp VideoRecorder.cpp RecordManager.cpp)
 
 #linking Gstreamer library with target executable
 target_link_libraries(${PROJECT_NAME} ${GSTREAMER_LIBRARIES})

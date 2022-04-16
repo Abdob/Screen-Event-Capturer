@@ -1,7 +1,12 @@
+#include "RecordManager.hpp"
 #include "VideoRecorder.hpp"
 #include <memory>
 
 int main(int arg, char *argv[]) {
+
+    //
+    RecordManager recordManager;
+    recordManager.run();
 
     // get duration from user
     unsigned int videoDuration;
@@ -11,9 +16,9 @@ int main(int arg, char *argv[]) {
     
     // make duration divisible by 4
     if(videoDuration == 0)
-	videoDuration = 4;
+	    videoDuration = 4;
     else
-	videoDuration = (videoDuration + 3) / 4 * 4;
+	    videoDuration = (videoDuration + 3) / 4 * 4;
 
     std::cout << "Screen Recording App: video duration set to " << videoDuration << " seconds." << std::endl;
 
