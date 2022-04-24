@@ -14,7 +14,7 @@ public:
     void stopRecording();
     void setSaveFile();
 
-public:
+private:
     const unsigned short id;
     std::string strId;
     GstElement *pipeline;
