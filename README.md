@@ -53,6 +53,25 @@ cd Screen-Event-Capturer/build
 touch event
 ```
 
+## File and Class Structures
+The two classes used are ```VideoRecorder``` and ```RecordManager```. In total there are five C++ files:
+```
+VideoRecorder.cpp
+VideoRecorder.hpp
+RecordManager.cpp
+RecordManager.hpp
+main.cpp
+``` 
+
+The main file initializes gstreamer and instantiates a ```RecordManager``` object and initializes to start the recording with Video```1```.
+
+The ```RecordManager``` class is responsible for getting the duration from the user, launching two recording threads in parrallell and synchronizing between the threads. The ```RecordManager``` class instantiates a ```VideoRecorder``` object each time a Video is started, twice per video duration and tells the ```VideoRecorder``` when to start and stop recording and if it needs to save the file.
+
+The ```VideoRecorder``` class sets a gstreamer pipeline to capture images from the screen and record them into a video file. It is responsible for creating and deleting or saving the video files.
+
+
+
+
 
 
 
