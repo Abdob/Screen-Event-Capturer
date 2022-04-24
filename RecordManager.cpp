@@ -92,7 +92,6 @@ void RecordManager::run() {
     secondHalfReady = true;
     threads.emplace_back(std::thread(&RecordManager::overlappingSegment, this));
     threads.emplace_back(std::thread(&RecordManager::overlappingSegment, this));
-    _condFirstHalf.notify_one();
 
     // ensure both overlapping session are complete before exiting
     threads[0].join();
