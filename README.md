@@ -141,11 +141,11 @@ The ```VideoRecorder``` class sets a gstreamer pipeline to capture images from t
 
 ### The project uses destructors appropriately.
 
-- [ ] At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor.
+- [x] At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor. The destructor in ```VideoRecorder.cpp``` line 37 performs cleaning acts include removing the file if needed.
 
 ### The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate.
 
-- [ ] The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction.
+- [x] The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction. ```RecordManager.cpp``` line 42 uses a unique pointer to store a ```VideoRecorder``` object. If the scope is left on line 50 it is cleaned properly, otherwise the scope is transferred in line 55 and later left in line 82. 
 
 ### The project follows the Rule of 5.
 
@@ -153,15 +153,15 @@ The ```VideoRecorder``` class sets a gstreamer pipeline to capture images from t
 
 ### The project uses move semantics to move data, instead of copying it, where possible.
 
-- [ ] For classes with move constructors, the project returns objects of that class by value, and relies on the move constructor, instead of copying the object.
+- [] For classes with move constructors, the project returns objects of that class by value, and relies on the move constructor, instead of copying the object.
 
 ### The project uses smart pointers instead of raw pointers.
 
-- [ ] The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. The project does not use raw pointers.
+- [x] The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. The project does not use raw pointers. ```RecordManager.cpp``` line 36.
 
 ### The project uses multithreading.
 
-- [ ] The project uses multiple threads in the execution.
+- [x] The project uses multiple threads in the execution. ```RecordManager.cpp``` line 93 and 94 launch two threads.
 
 ### A promise and future is used in the project.
 
@@ -170,9 +170,9 @@ The ```VideoRecorder``` class sets a gstreamer pipeline to capture images from t
 
 ### A mutex or lock is used in the project.
 
-- [ ] A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code.
+- [x] A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code. ```RecordManger.cpp``` line 39 and 63 use mutex and lock.
 
 ### A condition variable is used in the project.
 
-- [ ] A std::condition_variable is used in the project code to synchronize thread execution.
+- [x] A std::condition_variable is used in the project code to synchronize thread execution. ```RecordManager.cpp``` line 40 and 64 use condition variable.
 
