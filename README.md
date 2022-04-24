@@ -75,16 +75,15 @@ The ```VideoRecorder``` class sets a gstreamer pipeline to capture images from t
 ## Rubric Points
 
 ### A README with instructions is included with the project
-    This README is included with the project and has instructions for building/running the project. Additional libraries are needed to run the project, these are indicated with CMAKE installation instructions. This README is a markdown file.
+- [x] This README is included with the project and has instructions for building/running the project. Additional libraries are needed to run the project, these are indicated with CMAKE installation instructions. This README is a markdown file.
 
 ### The README indicates which project is chosen.
-    The README describes the project you have built.The README also indicates the file and class structure, along with the expected behavior or output of the program.
+- [x] The README describes the project you have built.The README also indicates the file and class structure, along with the expected behavior or output of the program.
 
 ### The README includes information about each rubric point addressed.
-- [ ] The README indicates which rubric points are addressed. The README also indicates where in the code (i.e. files and line numbers) that the rubric points are addressed.
+- [x] The README indicates which rubric points are addressed. The README also indicates where in the code (i.e. files and line numbers) that the rubric points are addressed.
 
 ### The submission must compile and run.
-    The project code compiles and runs without errors.
-    It uses cmake and make, as provided.
+- [x] The project code compiles and runs without errors. It uses cmake and make, as provided.
 
 
