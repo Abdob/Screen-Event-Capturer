@@ -7,6 +7,8 @@ The two streams are 50% overlapping where one stream's first half is recording a
 
 When the event occurs the program checks which stream is in the center half and saves that file while discarding all other files.
 
+<img src="screen.gif"/>
+
 ## Build Instructions
 
 Install cmake and git
