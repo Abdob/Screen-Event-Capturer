@@ -3,6 +3,7 @@
 #include <memory>
 #include <thread>
 #include <vector>
+#include <mutex>
 
 class RecordManager{
 
@@ -13,6 +14,8 @@ public:
     unsigned int getVideoDuration();
     bool eventOccured();
     std::vector<std::thread> threads;
+    std::mutex _mtxFirstHalf;
+    std::mutex _mtxSecondHalf;
 
 public:
     unsigned int videoDuration;

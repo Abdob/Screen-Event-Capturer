@@ -4,6 +4,7 @@ RecordManager::RecordManager(unsigned short vn) : videoNumber(vn) {
 };
 
 RecordManager::~RecordManager() {
+    remove("event");
 };
 
 unsigned int RecordManager::getVideoDuration(){
@@ -14,7 +15,8 @@ unsigned int RecordManager::getVideoDuration(){
     if(duration < 3)
 	    duration = 3;
     std::cout << "RecordManager: Video duration is set to " << duration << " seconds." << std::endl;
-    return duration;
+    // return duration in ms
+    return duration*1000;
 };
 
 bool RecordManager::eventOccured(){
@@ -22,7 +24,6 @@ bool RecordManager::eventOccured(){
     FILE *file;
     if (file = fopen("event", "r")) {
         fclose(file);
-        remove("event");
         return true;
     } else {
         return false;
@@ -30,37 +31,45 @@ bool RecordManager::eventOccured(){
 }
 
 void RecordManager::overlappingSegment(){
-    std::unique_ptr<VideoRecorder> scopedSession(new VideoRecorder(videoNumber++));
-    scopedSession->startRecording();
-    std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 2));
+
     while(true){
-    
-        std::unique_ptr<VideoRecorder> session(new VideoRecorder(videoNumber++));
-        session->startRecording();
-        std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 4));
-        if(eventOccured()){
-            // event occured on old session's third segment, stop recording new session
-            session->stopRecording();
-            // finish recording fourth segment
-            std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 4));
-            break;
+        std::unique_ptr<VideoRecorder> scopedSession = nullptr;
+        // first half
+        {
+            std::unique_lock<std::mutex> lck(_mtxFirstHalf);
+            std::unique_ptr<VideoRecorder> session(new VideoRecorder(videoNumber++));
+            session->startRecording();
+            std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration / 4));
+            if(eventOccured()){
+                // event occured on other segment's center half, stop recording new session
+                session->stopRecording();
+                break;
+            }
+            else{
+                // event hasn't occured finish recording this half and transfer scope
+                std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration / 4));
+                scopedSession = std::move(session); 
+            }
         }
-        else{
-            // event hasn't occured, stop recording old session before leaving scope
-            scopedSession->stopRecording();
-            scopedSession->setSaveFile();
-            // transfer scope to new session
-	        scopedSession = std::move(session); 
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 4));
-        if(eventOccured()){
-            // event occured on new session's second segment, finish recording second half
-            std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 2));
-            break; 
+
+        // second half
+        {
+            std::unique_lock<std::mutex> lck(_mtxSecondHalf);
+            std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration  / 4));
+            if(eventOccured()){
+                // event occured on this session's center half, finish recording this half and save file
+                std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration  / 4));
+                scopedSession->setSaveFile();
+                scopedSession->stopRecording();
+                break;
+            }
+            else{
+                // event didn't occured on this session's center half, stop recording immediately
+                scopedSession->stopRecording();
+            }
+
         }
     }
-    scopedSession->stopRecording();
-    scopedSession->setSaveFile();
 }
 
 void RecordManager::run() {
@@ -70,7 +79,9 @@ void RecordManager::run() {
     videoDuration = getVideoDuration();
 
     threads.emplace_back(std::thread(&RecordManager::overlappingSegment, this));
+    threads.emplace_back(std::thread(&RecordManager::overlappingSegment, this));
 
-    std::cout << "threads size: " << threads.size() << std::endl;
+    // ensure both overlapping session are complete before exiting
     threads[0].join();
+    threads[1].join();
 };
