@@ -2,6 +2,7 @@
 #include "VideoRecorder.hpp"
 #include <memory>
 #include <thread>
+#include <vector>
 
 class RecordManager{
 
@@ -11,8 +12,11 @@ public:
     void run();
     unsigned int getVideoDuration();
     bool eventOccured();
+    std::vector<std::thread> threads;
 
 public:
     unsigned int videoDuration;
     unsigned short videoNumber;
+private:
+    void overlappingSegment();
 };

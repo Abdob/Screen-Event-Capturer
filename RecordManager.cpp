@@ -10,11 +10,9 @@ unsigned int RecordManager::getVideoDuration(){
     unsigned int duration;
     std::cout << "RecordManager: Please enter a target duration in seconds" << std::endl;
     std::cin >> duration;
-    // make duration divisible by 4
-    if(duration == 0)
-	    duration = 4;
-    else
-	    duration = (duration + 3) / 4 * 4;
+    // make shortest duration 3 seconds
+    if(duration < 3)
+	    duration = 3;
     std::cout << "RecordManager: Video duration is set to " << duration << " seconds." << std::endl;
     return duration;
 };
@@ -31,39 +29,48 @@ bool RecordManager::eventOccured(){
     }
 }
 
+void RecordManager::overlappingSegment(){
+    std::unique_ptr<VideoRecorder> scopedSession(new VideoRecorder(videoNumber++));
+    scopedSession->startRecording();
+    std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 2));
+    while(true){
+    
+        std::unique_ptr<VideoRecorder> session(new VideoRecorder(videoNumber++));
+        session->startRecording();
+        std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 4));
+        if(eventOccured()){
+            // event occured on old session's third segment, stop recording new session
+            session->stopRecording();
+            // finish recording fourth segment
+            std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 4));
+            break;
+        }
+        else{
+            // event hasn't occured, stop recording old session before leaving scope
+            scopedSession->stopRecording();
+            scopedSession->setSaveFile();
+            // transfer scope to new session
+	        scopedSession = std::move(session); 
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 4));
+        if(eventOccured()){
+            // event occured on new session's second segment, finish recording second half
+            std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration * 1000 / 2));
+            break; 
+        }
+    }
+    scopedSession->stopRecording();
+    scopedSession->setSaveFile();
+}
+
 void RecordManager::run() {
 
     std::cout << "RecordManager: Welcome to the Screen Recording App" << std::endl;
     // get duration from user
     videoDuration = getVideoDuration();
 
-    std::unique_ptr<VideoRecorder> scopedSession(new VideoRecorder(videoNumber++));
-    scopedSession->startRecording();
-    sleep(videoDuration/2);
-    while(true){
-        std::unique_ptr<VideoRecorder> session(new VideoRecorder(videoNumber++));
-        session->startRecording();
-        sleep(videoDuration/4);
-        if(eventOccured()){
-            // event occured on old session's third segment, stop recording new session
-            session->stopRecording();
-            // finish recording fourth segment
-            sleep(videoDuration/4);
-            break;
-        }
-        else{
-            // event hasn't occured, stop recording old session before leaving scope
-            scopedSession->stopRecording();
-            // transfer scope to new session
-	        scopedSession = std::move(session); 
-        }
-        sleep(videoDuration/4);
-        if(eventOccured()){
-            // event occured on new session's second segment, finish recording second half
-            sleep(videoDuration/2);
-            break; 
-        }
-    }
-    scopedSession->stopRecording();
-    scopedSession->setSaveFile();
+    threads.emplace_back(std::thread(&RecordManager::overlappingSegment, this));
+
+    std::cout << "threads size: " << threads.size() << std::endl;
+    threads[0].join();
 };
