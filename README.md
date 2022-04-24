@@ -89,35 +89,35 @@ The ```VideoRecorder``` class sets a gstreamer pipeline to capture images from t
 
 ### The project demonstrates an understanding of C++ functions and control structures.
 
-- [ ] A variety of control structures are used in the project. The project code is clearly organized into functions.
+- [x] A variety of control structures are used in the project. The project code is clearly organized into functions.
 
 ### The project reads data from a file and process the data, or the program writes data to a file. 
 
- - [ ] The project reads data from an external file or writes data to a file as part of the necessary operation of the program.
+ - [x] The project reads data from an external file or writes data to a file as part of the necessary operation of the program. The filename is shown in ```VideoRecorder.cpp``` line 33 and is being written to under-the-hood when the starting the pipeline in ```VideoRecorder.cpp``` line 52. If the file is not saved it is deleted as shown in ```VideoRecorder.cpp``` line 45.
 
 ### The project accepts user input and processes the input.
 
- - [ ] The project accepts input from a user as part of the necessary operation of the program.
+ - [x] The project accepts input from a user as part of the necessary operation of the program. The duration is taken from the user at ```RecordManager.cpp``` line 13.
 
  ### The project uses Object Oriented Programming techniques.
 
- - [ ] The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks.
+ - [x] The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks.
 
 ### Classes use appropriate access specifiers for class members.
 
- - [ ] All class data members are explicitly specified as public, protected, or private.
+ - [x] All class data members are explicitly specified as public, protected, or private.
 
 ### Class constructors utilize member initialization lists.
 
- - [ ] All class members that are set to argument values are initialized through member initialization lists.
+ - [x] All class members that are set to argument values are initialized through member initialization lists. ```RecordManager.cpp``` line 3 shows the video number being initialized with a member initializing list set in ```main.cpp``` line 9.
 
 ### Classes abstract implementation details from their interfaces.
 
- - [ ] All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.
+ - [x] All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.
 
 ### Classes encapsulate behavior.
 
- - [ ] Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. State is accessed via member functions.
+ - [x] Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. State is accessed via member functions. On ```VideoRecorder.cpp``` line 73 and 74, the ```saveFile``` member is set through the ```setSaveFile()``` member function.
 
 ### Classes follow an appropriate inheritance hierarchy.
 
