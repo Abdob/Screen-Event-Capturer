@@ -37,37 +37,48 @@ void RecordManager::overlappingSegment(){
         // first half
         {
             std::unique_lock<std::mutex> lck(_mtxFirstHalf);
+            _condFirstHalf.wait(lck, [this] {return firstHalfReady;});
+            firstHalfReady = false;
             std::unique_ptr<VideoRecorder> session(new VideoRecorder(videoNumber++));
             session->startRecording();
             std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration / 4));
             if(eventOccured()){
                 // event occured on other segment's center half, stop recording new session
                 session->stopRecording();
+                firstHalfReady = true;
+                _condFirstHalf.notify_one();
                 break;
             }
             else{
                 // event hasn't occured finish recording this half and transfer scope
                 std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration / 4));
                 scopedSession = std::move(session); 
+                firstHalfReady = true;
+                _condFirstHalf.notify_one();
             }
         }
 
         // second half
         {
             std::unique_lock<std::mutex> lck(_mtxSecondHalf);
+            _condSecondHalf.wait(lck, [this] {return secondHalfReady;});
+            secondHalfReady = false;
             std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration  / 4));
             if(eventOccured()){
                 // event occured on this session's center half, finish recording this half and save file
                 std::this_thread::sleep_for(std::chrono::milliseconds(videoDuration  / 4));
                 scopedSession->setSaveFile();
                 scopedSession->stopRecording();
+                secondHalfReady = true;
+                _condSecondHalf.notify_one();
                 break;
             }
             else{
                 // event didn't occured on this session's center half, stop recording immediately
                 scopedSession->stopRecording();
+                secondHalfReady = true;
+                _condSecondHalf.notify_one();
             }
-
         }
     }
 }
@@ -77,9 +88,11 @@ void RecordManager::run() {
     std::cout << "RecordManager: Welcome to the Screen Recording App" << std::endl;
     // get duration from user
     videoDuration = getVideoDuration();
-
+    firstHalfReady = true;
+    secondHalfReady = true;
     threads.emplace_back(std::thread(&RecordManager::overlappingSegment, this));
     threads.emplace_back(std::thread(&RecordManager::overlappingSegment, this));
+    _condFirstHalf.notify_one();
 
     // ensure both overlapping session are complete before exiting
     threads[0].join();

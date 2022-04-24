@@ -4,6 +4,7 @@
 #include <thread>
 #include <vector>
 #include <mutex>
+#include <condition_variable>
 
 class RecordManager{
 
@@ -18,7 +19,11 @@ private:
     void overlappingSegment();
     std::vector<std::thread> threads;
     std::mutex _mtxFirstHalf;
+    std::condition_variable _condFirstHalf;
     std::mutex _mtxSecondHalf;
+    std::condition_variable _condSecondHalf;
     unsigned int videoDuration;
     unsigned short videoNumber;
+    bool firstHalfReady;
+    bool secondHalfReady;
 };
