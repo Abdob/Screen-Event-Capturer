@@ -8,22 +8,27 @@ The two streams are 50% overlapping where one stream's first half is recording a
 When the event occurs the program checks which stream is in the center half and saves that file while discarding all other files.
 
 ## Build Instructions
-Install Gstreamer using the script provided
-
-```sudo ./install_gstreamer.sh```
 
 Install cmake and git
 
-```sudo apt install cmake git```
+```
+sudo apt install cmake git
+```
 
-clone repo
-
-```git clone https://github.com/Abdob/Screen-Event-Capturer```
-
-change directories into repo, create a build directory and build using cmake
+clone repo and change directories into the repo
+```
+git clone https://github.com/Abdob/Screen-Event-Capturer
+cd Screen-Event-Capturer
+```
+Install Gstreamer using the script provided
 
 ```
-cd Screen-Event-Capturer
+sudo ./install_gstreamer.sh
+```
+
+create a build directory, cd into it and build using cmake
+
+```
 mkdir build
 cd build
 cmake ..
@@ -33,7 +38,9 @@ make
 ## Run Instructions
 Run the program
 
-``` ./screen_recording_app```
+``` 
+./screen_recording_app
+```
 
 Enter a duration in seconds as prompted and allow the recording to happen.
 
@@ -43,5 +50,7 @@ When ready to stop, open a separate terminal induce an event by creating an even
 cd Screen-Event-Capturer/build
 touch event
 ```
+
+
 
 
