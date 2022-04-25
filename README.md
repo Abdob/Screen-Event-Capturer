@@ -153,7 +153,7 @@ The ```VideoRecorder``` class sets a gstreamer pipeline to capture images from t
 
 ### The project uses move semantics to move data, instead of copying it, where possible.
 
-- [] For classes with move constructors, the project returns objects of that class by value, and relies on the move constructor, instead of copying the object.
+- [ ] For classes with move constructors, the project returns objects of that class by value, and relies on the move constructor, instead of copying the object.
 
 ### The project uses smart pointers instead of raw pointers.
 
